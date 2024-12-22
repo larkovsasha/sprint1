@@ -54,7 +54,7 @@ func calcHandlerFunction(w http.ResponseWriter, r *http.Request) {
 		if errors.Is(err, calculation.ErrInternalServer) {
 			writeErrorResponse(w, http.StatusInternalServerError, calculation.ErrInternalServer.Error())
 		} else {
-			writeErrorResponse(w, http.StatusUnprocessableEntity, calculation.ErrInvalidExpression.Error())
+			writeErrorResponse(w, http.StatusUnprocessableEntity, err.Error())
 		}
 		return
 	}

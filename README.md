@@ -13,22 +13,29 @@
 С одним эндпоинтом, котороый принимает JSON с математическим выражением. `POST /api/v1/calculate`
 
 ## Пример запроса с использованием curl
-`curl -X POST http://localhost:8080/api/v1/calculate -H "Content-Type: application/json" -d "{\"expression\": \"25/(6-5)+(1+2)*15\"}"`
-### Примеры ответов
-
-1. **Успешный запрос**:
+1. **Успешный запрос. Код 200**:
+```
+curl -X POST http://localhost:8080/api/v1/calculate -H "Content-Type: application/json" -d "{\"expression\": \"25/(6-5)+(1+2)*15\"}"
+```
 Ответ:
-
 ```json
-{"result": "6"}
+{"result": "72"}
 ```
 
-2. **Ошибка: некорректное выражение**:
-
-```json
-{"error":"Expression is not valid"}
+2. **Ошибка: некорректное выражение. Ошибка 422**:
 ```
-
+curl -X POST http://localhost:8080/api/v1/calculate -H "Content-Type: application/json" -d "{\"expression\": \"25/(6-5)+((1+2)*15\"}"
+```
+```json
+{"error":"Wrong brackets sequence"}
+```
+3. **Ошибка: некорректное выражение. Ошибка 500**:
+```
+curl -X POST http://localhost:8080/api/v1/calculate -H "Content-Type: application/json" -d "{\"expression\": \"25(6-5)+(1+2)*15\"}"
+```
+```json
+{"error":"internal server error"}
+```
 В зависимости от выражения будет разный ответ, примеры можно посмотреть в тестах.
 ## Команды для тестирования
 1. Тестирование калькулятора
