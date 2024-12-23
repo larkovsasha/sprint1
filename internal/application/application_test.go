@@ -72,40 +72,40 @@ func TestApplication_RunServer(t *testing.T) {
 	}{
 		{
 			statusCode:  http.StatusUnprocessableEntity,
-			expectedErr: calculation.ErrInvalidExpression.Error(),
+			expectedErr: calculation.ErrExpEndsWithSign.Error(),
 			expression:  "1+1*",
 		},
 
 		{
 			statusCode:  http.StatusUnprocessableEntity,
 			expression:  "",
-			expectedErr: calculation.ErrInvalidExpression.Error(),
+			expectedErr: calculation.ErrExpIsEmpty.Error(),
 		},
 
 		{
 			statusCode:  http.StatusUnprocessableEntity,
 			expression:  "1+*1",
-			expectedErr: calculation.ErrInvalidExpression.Error(),
+			expectedErr: calculation.ErrTwoSignsInRow.Error(),
 		},
 		{
 			statusCode:  http.StatusUnprocessableEntity,
 			expression:  "1+(1+5))",
-			expectedErr: calculation.ErrInvalidExpression.Error(),
+			expectedErr: calculation.ErrWrongBracketsSequence.Error(),
 		},
 		{
 			statusCode:  http.StatusUnprocessableEntity,
 			expression:  "1+((1+5)",
-			expectedErr: calculation.ErrInvalidExpression.Error(),
+			expectedErr: calculation.ErrWrongBracketsSequence.Error(),
 		},
 		{
 			statusCode:  http.StatusUnprocessableEntity,
 			expression:  "25/(6-6)+(8+2)*15",
-			expectedErr: calculation.ErrInvalidExpression.Error(),
+			expectedErr: calculation.ErrDivisionByZero.Error(),
 		},
 		{
 			statusCode:  http.StatusUnprocessableEntity,
 			expression:  "25/(6-6)+(d+2)*15",
-			expectedErr: calculation.ErrInvalidExpression.Error(),
+			expectedErr: calculation.ErrInvalidChars.Error(),
 		},
 	}
 
