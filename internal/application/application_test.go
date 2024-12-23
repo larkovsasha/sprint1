@@ -145,4 +145,53 @@ func TestApplication_RunServer(t *testing.T) {
 			}
 		})
 	}
+
+	uncorrect_reqs := []struct {
+		expression  string
+		statusCode  int
+		expectedErr string
+	}{
+		{
+			statusCode:  http.StatusInternalServerError,
+			expectedErr: calculation.ErrInternalServer.Error(),
+			expression:  "1+1",
+		},
+	}
+
+	for _, tc := range uncorrect_reqs {
+		t.Run(tc.expression, func(t *testing.T) {
+			data := testExpression{Expression: tc.expression}
+			jsonData, _ := json.Marshal(data)
+			req, err := http.NewRequest("GET", "/api/v1/calculate", bytes.NewBuffer(jsonData))
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			req.Header.Set("Content-Type", "application/json")
+
+			rr := httptest.NewRecorder()
+
+			handler := application.CalcHandler
+			handler.ServeHTTP(rr, req)
+
+			if status := rr.Code; status != tc.statusCode {
+				t.Errorf("handler returned wrong status code: got %v want %v", status, tc.statusCode)
+			}
+
+			body, err := ioutil.ReadAll(rr.Body)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			var responseBody map[string]interface{}
+			err = json.Unmarshal(body, &responseBody)
+			if err != nil {
+				t.Fatal(err)
+			}
+
+			if responseBody["error"].(string) != tc.expectedErr {
+				t.Errorf("handler returned wrong result: got %v want %v", responseBody["result"], tc.expectedErr)
+			}
+		})
+	}
 }

@@ -103,6 +103,11 @@ func TestCalc(t *testing.T) {
 			expression:  "25/(6-6)+(d+2)*15",
 			expectedErr: calculation.ErrInvalidChars,
 		},
+		{
+			name:        "internal server",
+			expression:  "25(6-6)+(1+2)*15",
+			expectedErr: calculation.ErrInternalServer,
+		},
 	}
 
 	for _, testCase := range testCasesFail {
