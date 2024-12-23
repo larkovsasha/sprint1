@@ -6,10 +6,19 @@
 Проект для яндекс лицея, вычисление математических выражений.
 
 ## Запуск
-1. Выполнить команду go mod tidy
-2. Запустить сервер.
-#### `go run ./cmd/main.go `
-3. Сервис будет доступен по адресу: [http://localhost:8080/api/v1/calculate](http://localhost:8080/api/v1/calculate). 
+1. Скопировать Репозиторий 
+```
+git clone https://github.com/larkovsasha/sprint1.git
+```
+2. Выполнить команду
+```
+go mod tidy
+```
+3. Запустить сервер.
+```
+go run ./cmd/main.go
+```
+4. Сервис будет доступен по адресу: [http://localhost:8080/api/v1/calculate](http://localhost:8080/api/v1/calculate). 
 С одним эндпоинтом, котороый принимает JSON с математическим выражением. `POST /api/v1/calculate`
 
 ## Пример запроса с использованием curl
