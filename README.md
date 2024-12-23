@@ -29,9 +29,9 @@ curl -X POST http://localhost:8080/api/v1/calculate -H "Content-Type: applicatio
 ```json
 {"error":"Wrong brackets sequence"}
 ```
-3. **Ошибка: некорректное выражение. Ошибка 500**:
+3. **Ошибка на сервере. Ошибка 500**:
 ```
-curl -X POST http://localhost:8080/api/v1/calculate -H "Content-Type: application/json" -d "{\"expression\": \"25(6-5)+(1+2)*15\"}"
+curl -X GET http://localhost:8080/api/v1/calculate -H "Content-Type: application/json" -d "{\"expression\": \"25(6-5)+(1+2)*15\"}"
 ```
 ```json
 {"error":"internal server error"}
