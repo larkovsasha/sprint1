@@ -37,8 +37,6 @@ type Request struct {
 	Expression string `json:"expression"`
 }
 
-var request Request
-
 type SuccessResponse struct {
 	Result float64 `json:"result"`
 }
@@ -48,6 +46,12 @@ type ErrorResponse struct {
 }
 
 func calcHandlerFunction(w http.ResponseWriter, r *http.Request) {
+	var request Request
+	if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
+		writeErrorResponse(w, http.StatusBadRequest, "Invalid JSON format")
+		return
+	}
+
 	result, err := calculation.Calc(request.Expression)
 	if err != nil {
 		log.Println(err)
@@ -81,7 +85,7 @@ func LoggingMiddleware(next http.HandlerFunc) http.HandlerFunc {
 				log.Printf("%s", err)
 			}
 		}()
-		log.Printf("%s %s", r.Method, request)
+		log.Printf("%s", r.Method)
 		next.ServeHTTP(w, r)
 	}
 }
@@ -91,11 +95,6 @@ func ParseRequestMiddleware(next http.HandlerFunc) http.HandlerFunc {
 		if r.Method != http.MethodPost {
 			log.Println("Wrong method")
 			writeErrorResponse(w, http.StatusInternalServerError, calculation.ErrInternalServer.Error())
-			return
-		}
-
-		if err := json.NewDecoder(r.Body).Decode(&request); err != nil {
-			writeErrorResponse(w, http.StatusBadRequest, "Invalid JSON format")
 			return
 		}
 		next.ServeHTTP(w, r)

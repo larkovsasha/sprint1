@@ -19,7 +19,7 @@ curl -X POST http://localhost:8080/api/v1/calculate -H "Content-Type: applicatio
 ```
 Ответ:
 ```json
-{"result": "72"}
+{"result": "70"}
 ```
 
 2. **Ошибка: некорректное выражение. Ошибка 422**:
